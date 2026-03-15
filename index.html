@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,74 +12,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Maréchal Pro</title>
     
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Maréchal Pro">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1hcmVjaGFsIFBybyIsCiAgInNob3J0X25hbWUiOiAiTWFyZWNoYWxQcm8iLAogICJpY29ucyI6IFt7ICJzcmMiOiAibG9nby5wbmciLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyIgfSwgeyAic3JjIjogImxvZ28ucG5nIiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmciIH1dLAogICJzdGFydF91cmwiOiAiLi9pbmRleC5odG1sIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmMmYyZjciLCAidGhlbWVfY29sb3IiOiAiIzAwN2FmZiIKfQ==">
 
     <style>
         :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --gray: #8e8e93; --gold: #fbc02d; --green: #34c759; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; color: #1c1c1e; }
-        header { background: white; padding: 15px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #d1d1d6; }
-        .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: #1c1c1e; }
+        
+        header { background: white; padding: 15px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #d1d1d6; display: flex; align-items: center; gap: 12px; }
         .back-btn { background: #f2f2f7; border: none; padding: 10px 16px; border-radius: 12px; font-weight: bold; color: var(--blue); }
         h1 { font-size: 18px; margin: 0; flex-grow: 1; font-weight: 800; }
-        .logo-img { height: 40px; border-radius: 8px; }
-        .search-bar { display: flex; background: #e5e5ea; border-radius: 12px; padding: 8px 12px; align-items: center; gap: 8px; }
-        .search-bar input { background: none; border: none; flex-grow: 1; font-size: 16px; outline: none; padding: 5px; }
+        .logo-img { height: 40px; border-radius: 8px; width: 40px; object-fit: cover; }
+
+        .search-bar { padding: 10px 15px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
+        .search-bar input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ccc; outline: none; }
+
         .container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .img-box { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .name { font-weight: bold; margin-top: 10px; display: block; font-size: 15px; }
-        .counter { font-size: 11px; color: white; background: var(--gray); padding: 2px 8px; border-radius: 10px; margin-top: 5px; display: inline-block; }
+        
         .full-card { grid-column: span 2; text-align: left; padding: 15px; }
-        .note-box { background: #fffde7; padding: 15px; border-radius: 15px; margin: 15px 0; border-left: 5px solid var(--gold); }
-        .album-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
-        .album-item { position: relative; border-radius: 8px; overflow: hidden; background: #ddd; aspect-ratio: 1/1; }
-        .album-item img { width: 100%; height: 100%; object-fit: cover; }
-        .album-date { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 8px; text-align: center; padding: 2px; }
-        .btn-row { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .btn-act { flex: 1; min-width: 120px; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 40px; box-shadow: 0 5px 15px rgba(0,122,255,0.4); z-index: 200; }
+        .date-folder { background: #fff; border-radius: 18px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e5ea; }
+        .folder-title { font-weight: bold; color: #555; font-size: 14px; margin-bottom: 10px; display: block; }
+        
+        .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .thumb { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; background: #f0f0f0; }
+        .note-bubble { background: #fffde7; padding: 10px; border-radius: 12px; margin-top: 10px; border-left: 4px solid var(--gold); font-size: 14px; }
+
+        #viewer { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:1000; align-items:center; justify-content:center; }
+        #viewer img { max-width: 100%; max-height: 85%; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; padding: 25px 15px; font-size: 30px; }
+        #prevBtn { left: 10px; } #nextBtn { right: 10px; }
+
+        .btn-row { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+        .btn-act { flex: 1; min-width: 90px; padding: 12px; border: none; border-radius: 12px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+        .admin-panel { padding: 15px; background: #eee; border-radius: 15px; margin: 15px; display: none; }
+        .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 65px; height: 65px; border-radius: 50%; font-size: 35px; box-shadow: 0 5px 15px rgba(0,122,255,0.4); z-index: 200; }
         #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center; }
-        .modal-box { background:white; padding:25px; border-radius:24px; width:85%; max-height: 80vh; overflow-y: auto; }
-        input, textarea { width:100%; padding:12px; margin:8px 0; border:1px solid #ddd; border-radius:10px; box-sizing:border-box; }
+        .modal-box { background:white; padding:25px; border-radius:24px; width:85%; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-top">
-        <button class="back-btn" id="btnBack" onclick="goBack()" style="display:none">‹ Retour</button>
-        <h1 id="title">Mes Écuries</h1>
-        <img src="logo.png" class="logo-img" alt="Logo">
-    </div>
-    <div class="search-bar" id="searchContainer">
-        <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="Rechercher..." oninput="render()">
-    </div>
+    <button class="back-btn" id="btnBack" onclick="goBack()" style="display:none">‹</button>
+    <h1 id="title">Maréchal Pro</h1>
+    <img src="./logo.png" class="logo-img" onclick="toggleAdmin()">
 </header>
+
+<div id="searchBox" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Rechercher écurie..." oninput="render()">
+    <button onclick="startSearchVocal()" style="border:none; background:none; font-size:20px;">🎤</button>
+</div>
+
+<div id="adminPanel" class="admin-panel">
+    <p><strong>Sauvegarde des données :</strong></p>
+    <button onclick="exportData()" style="padding:10px; background:var(--green); color:white; border:none; border-radius:8px;">Exporter (Sauvegarder)</button>
+    <hr>
+    <p><strong>Restaurer une sauvegarde :</strong></p>
+    <input type="file" id="importFile" onchange="importData(event)" style="font-size:12px">
+</div>
 
 <div class="container" id="grid"></div>
 <button class="fab" onclick="showAdd()">+</button>
 
+<div id="viewer">
+    <div style="position:absolute; top:20px; right:20px; color:white; font-size:40px;" onclick="closeGallery()">&times;</div>
+    <button class="nav-btn" id="prevBtn" onclick="changeImg(-1)">&#10094;</button>
+    <img id="viewerImg">
+    <button class="nav-btn" id="nextBtn" onclick="changeImg(1)">&#10095;</button>
+</div>
+
 <div id="modal">
     <div class="modal-box">
-        <h3 id="mTitle">Ajouter</h3>
+        <h3 id="mTitle">Nouveau</h3>
         <div id="fields"></div>
-        <button onclick="doAdd()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">ENREGISTRER</button>
+        <button onclick="doAdd()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">VALIDER</button>
         <button onclick="hideAdd()" style="width:100%; margin-top:10px; background:none; border:none; color:var(--red);">Annuler</button>
     </div>
 </div>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('marechal_v12')) || [];
+    let data = JSON.parse(localStorage.getItem('marechal_v17')) || [];
     let cur = { level: 'ecuries', ec: null, cl: null };
+    let currentGallery = [];
+    let currentIndex = 0;
 
     function render() {
         const grid = document.getElementById('grid');
@@ -81,80 +111,100 @@
         const search = document.getElementById('searchInput').value.toLowerCase();
         grid.innerHTML = '';
         back.style.display = cur.level === 'ecuries' ? 'none' : 'block';
+        document.getElementById('searchBox').style.display = cur.level === 'ecuries' ? 'flex' : 'none';
 
         if (cur.level === 'ecuries') {
             title.innerText = "Mes Écuries";
-            data.filter(ec => ec.nom.toLowerCase().includes(search)).forEach((ec, i) => {
-                grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`);
-            });
+            data.filter(e => e.nom.toLowerCase().includes(search)).forEach((ec, i) => grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`));
         } else if (cur.level === 'clients') {
             title.innerText = data[cur.ec].nom;
-            data[cur.ec].clients.forEach((cl, i) => {
-                grid.innerHTML += card(i, cl.nom, cl.img, '👤', `${cl.chevaux.length} Chevaux`, `goCl(${i})`);
-            });
+            data[cur.ec].clients.forEach((cl, i) => grid.innerHTML += card(i, cl.nom, cl.img, '👤', `${cl.chevaux.length} Chevaux`, `goCl(${i})`));
         } else {
-            const horse = data[cur.ec].clients[cur.cl].chevaux;
+            const horseList = data[cur.ec].clients[cur.cl].chevaux;
             title.innerText = data[cur.ec].clients[cur.cl].nom;
-            horse.forEach((h, i) => {
-                grid.innerHTML += `
-                <div class="card full-card">
+            horseList.forEach((ch, i) => {
+                let historyHTML = '';
+                const allPics = ch.album || [];
+                const allDates = [...new Set([...allPics.map(p=>p.date), ...(ch.notes||[]).map(n=>n.date)])].sort((a,b)=>b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
+                
+                allDates.forEach(day => {
+                    historyHTML += `<div class="date-folder"><span class="folder-title">Passage du ${day}</span>`;
+                    const dayPics = allPics.filter(p=>p.date === day);
+                    if(dayPics.length > 0) {
+                        historyHTML += `<div class="photo-grid">` + dayPics.map(p => {
+                            const globalIdx = allPics.findIndex(ap => ap.src === p.src);
+                            return `<img src="${p.src}" class="thumb" onclick="openGallery(${i}, ${globalIdx})">`;
+                        }).join('') + `</div>`;
+                    }
+                    const dayNotes = (ch.notes||[]).filter(n=>n.date === day);
+                    dayNotes.forEach(n => historyHTML += `<div class="note-bubble">${n.txt}</div>`);
+                    historyHTML += `</div>`;
+                });
+
+                grid.innerHTML += `<div class="card full-card">
                     <div class="img-box" style="aspect-ratio:16/9">
-                        ${h.img ? `<img src="${h.img}">` : '🐎'}
-                        <label style="position:absolute; bottom:5px; right:5px; background:white; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 5px rgba(0,0,0,0.2);">📸<input type="file" accept="image/*" capture="environment" style="display:none" onchange="setMainImg(event, ${i})"></label>
+                        ${ch.img ? `<img src="${ch.img}">` : '🐎'}
+                        <label style="position:absolute; bottom:8px; right:8px; background:white; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.2);">📸<input type="file" accept="image/*" style="display:none" onchange="setMainImg(event, ${i})"></label>
                     </div>
-                    <span class="name" style="font-size:20px">${h.nom}</span>
-                    <div class="note-box"><b>Note (${h.date || '--'}) :</b><br>${h.note || 'Pas de note.'}</div>
-                    <div class="album-grid">
-                        ${(h.album || []).map(pic => `<div class="album-item"><img src="${pic.src}"><div class="album-date">${pic.date}</div></div>`).join('')}
-                    </div>
+                    <span class="name" style="font-size:22px; margin:10px 0;">${ch.nom}</span>
                     <div class="btn-row">
                         <button class="btn-act" style="background:var(--blue)" onclick="startVocal(${i})">🎤 Vocal</button>
-                        <label class="btn-act" style="background:var(--green)">📸 Photo Suivi<input type="file" accept="image/*" capture="environment" style="display:none" onchange="addAlbumPic(event, ${i})"></label>
-                        <button class="btn-act" style="background:var(--red); flex:0.3" onclick="remove(${i})">🗑️</button>
+                        <button class="btn-act" style="background:var(--gold)" onclick="manualNote(${i})">✍️ Écrit</button>
+                        <label class="btn-act" style="background:var(--green)">📸 Photo<input type="file" accept="image/*" style="display:none" onchange="addAlbumPic(event, ${i})"></label>
+                        <button class="btn-act" style="background:var(--red); flex:0.2" onclick="remove(${i})">🗑️</button>
                     </div>
+                    <div>${historyHTML || '<p style="color:gray;text-align:center">Aucun dossier.</p>'}</div>
                 </div>`;
             });
         }
     }
 
-    function card(idx, nom, img, emoji, count, act) {
-        return `<div class="card">
-            <div class="img-box" onclick="${act}">${img ? `<img src="${img}">` : emoji}</div>
-            <span class="name" onclick="${act}">${nom}</span>
-            <span class="counter">${count}</span>
-        </div>`;
+    function card(idx, nom, img, emoji, sub, act) {
+        return `<div class="card"><div class="img-box" onclick="${act}">${img ? `<img src="${img}">` : emoji}</div><span class="name" onclick="${act}">${nom}</span><span style="font-size:11px;color:gray">${sub}</span></div>`;
     }
+
+    // FONCTIONS GALERIE
+    function openGallery(hIdx, imgIdx) {
+        currentGallery = data[cur.ec].clients[cur.cl].chevaux[hIdx].album || [];
+        currentIndex = imgIdx;
+        document.getElementById('viewerImg').src = currentGallery[currentIndex].src;
+        document.getElementById('viewer').style.display = 'flex';
+    }
+    function changeImg(dir) {
+        currentIndex = (currentIndex + dir + currentGallery.length) % currentGallery.length;
+        document.getElementById('viewerImg').src = currentGallery[currentIndex].src;
+    }
+    function closeGallery() { document.getElementById('viewer').style.display = 'none'; }
+
+    // GESTION DONNÉES
+    function save() { localStorage.setItem('marechal_v17', JSON.stringify(data)); render(); }
+    function exportData() {
+        const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `sauvegarde_marechal_${new Date().toLocaleDateString()}.json`;
+        a.click();
+    }
+    function importData(e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => { data = JSON.parse(reader.result); save(); alert("Données restaurées !"); };
+        reader.readAsText(file);
+    }
+    function toggleAdmin() { const p = document.getElementById('adminPanel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
 
     function goEc(i) { cur.ec = i; cur.level = 'clients'; render(); }
     function goCl(i) { cur.cl = i; cur.level = 'chevaux'; render(); }
     function goBack() { cur.level = (cur.level === 'chevaux') ? 'clients' : 'ecuries'; render(); }
-
-    function showAdd() {
-        const f = document.getElementById('fields');
-        f.innerHTML = '<input type="text" id="mNom" placeholder="Nom...">';
-        if(cur.level === 'clients') f.innerHTML += '<input type="tel" id="mTel" placeholder="Tél..."><textarea id="mAdr" placeholder="Adresse..."></textarea>';
-        document.getElementById('mTitle').innerText = "Ajouter";
-        document.getElementById('modal').style.display = 'flex';
-    }
+    function showAdd() { document.getElementById('fields').innerHTML = '<input type="text" id="mNom" style="width:100%;padding:10px;border-radius:10px;border:1px solid #ddd" placeholder="Nom...">'; document.getElementById('modal').style.display = 'flex'; }
+    function hideAdd() { document.getElementById('modal').style.display = 'none'; }
 
     function doAdd() {
         const nom = document.getElementById('mNom').value; if(!nom) return;
-        const d = new Date().toLocaleDateString('fr-FR');
         if(cur.level === 'ecuries') data.push({nom, img:'', clients:[]});
-        else if(cur.level === 'clients') data[cur.ec].clients.push({nom, tel:document.getElementById('mTel').value, adr:document.getElementById('mAdr').value, img:'', chevaux:[]});
-        else data[cur.ec].clients[cur.cl].chevaux.push({nom, img:'', date:d, note:'', album:[]});
+        else if(cur.level === 'clients') data[cur.ec].clients.push({nom, img:'', chevaux:[]});
+        else data[cur.ec].clients[cur.cl].chevaux.push({nom, img:'', notes:[], album:[]});
         save(); hideAdd();
-    }
-
-    function setMainImg(e, i) {
-        const r = new FileReader();
-        r.onload = () => {
-            if(cur.level === 'ecuries') data[i].img = r.result;
-            else if(cur.level === 'clients') data[cur.ec].clients[i].img = r.result;
-            else data[cur.ec].clients[cur.cl].chevaux[i].img = r.result;
-            save();
-        };
-        r.readAsDataURL(e.target.files[0]);
     }
 
     function addAlbumPic(e, i) {
@@ -162,38 +212,39 @@
         r.onload = () => {
             const h = data[cur.ec].clients[cur.cl].chevaux[i];
             if(!h.album) h.album = [];
-            h.album.unshift({ src: r.result, date: new Date().toLocaleDateString('fr-FR') });
+            h.album.push({ src: r.result, date: new Date().toLocaleDateString('fr-FR') });
             save();
         };
         r.readAsDataURL(e.target.files[0]);
     }
 
-    function startVocal(i) {
-        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return alert("Micro non supporté");
-        const r = new Rec(); r.lang='fr-FR'; r.start();
-        r.onresult = (e) => { 
-            data[cur.ec].clients[cur.cl].chevaux[i].note = e.results[0][0].transcript; 
-            data[cur.ec].clients[cur.cl].chevaux[i].date = new Date().toLocaleDateString('fr-FR');
-            save(); 
-        };
+    function setMainImg(e, i) {
+        const r = new FileReader();
+        r.onload = () => { data[cur.ec].clients[cur.cl].chevaux[i].img = r.result; save(); };
+        r.readAsDataURL(e.target.files[0]);
     }
 
-    function hideAdd() { document.getElementById('modal').style.display = 'none'; }
+    function startVocal(i) {
+        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+        const r = new Rec(); r.lang = 'fr-FR'; r.start();
+        r.onresult = (e) => { addNote(i, e.results[0][0].transcript); };
+    }
+
+    function startSearchVocal() {
+        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+        const r = new Rec(); r.lang = 'fr-FR'; r.start();
+        r.onresult = (e) => { document.getElementById('searchInput').value = e.results[0][0].transcript; render(); };
+    }
+
+    function manualNote(i) { const txt = prompt("Note :"); if(txt) addNote(i, txt); }
+    function addNote(i, txt) { const h = data[cur.ec].clients[cur.cl].chevaux[i]; if(!h.notes) h.notes = []; h.notes.push({ txt, date: new Date().toLocaleDateString('fr-FR') }); save(); }
     function remove(i) { if(confirm("Supprimer ?")) { 
         if(cur.level==='ecuries') data.splice(i,1);
         else if(cur.level==='clients') data[cur.ec].clients.splice(i,1);
         else data[cur.ec].clients[cur.cl].chevaux.splice(i,1);
         save(); 
     } }
-    function save() { localStorage.setItem('marechal_v12', JSON.stringify(data)); render(); }
     render();
 </script>
 </body>
 </html>
-
-
-
-
-
-
