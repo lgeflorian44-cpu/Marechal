@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,178 +6,197 @@
     <title>Maréchal Pro</title>
     <style>
         :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --green: #34c759; --gold: #fbc02d; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; color: #1c1c1e; }
         
-        header { background: white; padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #d1d1d6; position: sticky; top: 0; z-index: 100; height: 65px; box-sizing: border-box; }
-        .back-btn { background: #e5e5ea; border: none; width: 65px; height: 45px; border-radius: 12px; font-size: 25px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; }
-        h1 { font-size: 18px; margin: 0; flex-grow: 1; font-weight: 800; }
+        header { background: white; padding: 10px 15px; display: flex; align-items: center; border-bottom: 1px solid #d1d1d6; position: sticky; top: 0; z-index: 1000; height: 65px; box-sizing: border-box; }
+        .back-btn { background: #e5e5ea; border: none; padding: 10px 18px; border-radius: 12px; font-size: 16px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; }
+        h1 { font-size: 18px; margin: 0; flex-grow: 1; text-align: center; font-weight: 800; }
 
-        .search-bar { padding: 10px 15px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
-        .search-bar input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; outline: none; }
+        .search-container { padding: 12px 15px; background: white; border-bottom: 1px solid #ddd; }
+        #searchInput { width: 100%; padding: 14px; border-radius: 14px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; background: #f2f2f7; outline: none; }
 
         .container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; }
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 8px; }
+        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.06); position: relative; border: 1px solid rgba(0,0,0,0.03); }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 18px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 45px; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        .cam-overlay { position: absolute; bottom: 8px; right: 8px; background: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 18px; z-index: 10; }
+        /* Petit bouton photo sur les icônes */
+        .cam-badge { position: absolute; bottom: 5px; right: 5px; background: white; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 18px; z-index: 5; }
 
-        .full-card { grid-column: span 2; text-align: left; padding: 15px; }
-        .date-folder { background: #fff; border-radius: 18px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e5ea; }
-        .folder-title { font-weight: bold; color: #555; font-size: 14px; margin-bottom: 10px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .full-card { grid-column: span 2; text-align: left; padding: 18px; }
+        .folder { background: #fff; border-radius: 18px; padding: 15px; margin-top: 15px; border: 1px solid #e5e5ea; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .folder-title { font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; color: #666; font-size: 14px; }
         
-        .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
-        .thumb { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; background: #f0f0f0; }
-        .note-bubble { background: #fffde7; padding: 10px; border-radius: 12px; margin-top: 10px; border-left: 4px solid var(--gold); font-size: 14px; }
+        .pic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+        .pic-grid img { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; border: 1px solid #eee; }
+        .note-bubble { background: #fff9c4; padding: 12px; border-radius: 12px; margin-top: 10px; border-left: 5px solid var(--gold); font-size: 15px; color: #333; }
 
-        #viewer { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:1000; align-items:center; justify-content:center; }
-        #viewer img { max-width: 100%; max-height: 85%; }
+        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { flex: 1; padding: 16px; border: none; border-radius: 14px; font-weight: bold; color: white; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-vocal { background: var(--blue); }
+        .btn-photo { background: var(--green); }
+        .btn-del { background: var(--red); flex: 0.25; }
 
-        .btn-row { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
-        .btn-act { flex: 1; min-width: 90px; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
-
-        .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 65px; height: 65px; border-radius: 50%; font-size: 35px; box-shadow: 0 5px 15px rgba(0,122,255,0.4); z-index: 200; }
-        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center; }
-        .modal-box { background:white; padding:25px; border-radius:24px; width:85%; }
+        .fab { position: fixed; bottom: 30px; right: 25px; background: var(--blue); color: white; border: none; width: 68px; height: 68px; border-radius: 50%; font-size: 38px; box-shadow: 0 6px 18px rgba(0,122,255,0.4); z-index: 500; }
     </style>
 </head>
 <body>
 
 <header>
-    <button class="back-btn" id="btnBack" onclick="goBack()" style="visibility:hidden">‹</button>
-    <h1 id="title">Maréchal Pro</h1>
+    <button id="btnBack" class="back-btn" onclick="goBack()" style="visibility:hidden">‹ RETOUR</button>
+    <h1 id="mainTitle">Mes Écuries</h1>
 </header>
 
-<div id="searchBox" class="search-bar">
-    <input type="text" id="searchInput" placeholder="Rechercher écurie..." oninput="render()">
+<div id="searchSection" class="search-container">
+    <input type="text" id="searchInput" placeholder="Rechercher une écurie..." oninput="render()">
 </div>
 
-<div class="container" id="grid"></div>
-<button class="fab" onclick="showAdd()">+</button>
+<div id="grid" class="container"></div>
 
-<div id="viewer" onclick="this.style.display='none'">
-    <img id="viewerImg" src="">
-</div>
-
-<div id="modal">
-    <div class="modal-box">
-        <h3>Nouveau</h3>
-        <input type="text" id="mNom" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:16px;" placeholder="Nom...">
-        <button onclick="doAdd()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">VALIDER</button>
-        <button onclick="hideAdd()" style="width:100%; margin-top:10px; background:none; border:none; color:var(--red);">Annuler</button>
-    </div>
-</div>
+<button class="fab" onclick="addNewItem()">+</button>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('marechal_v22')) || [];
-    let cur = { level: 'ecuries', ec: null, cl: null };
+    let data = JSON.parse(localStorage.getItem('marechal_v25')) || [];
+    let state = { view: 'ecuries', ecIdx: null, clIdx: null };
 
     function render() {
         const grid = document.getElementById('grid');
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        const back = document.getElementById('btnBack');
-        grid.innerHTML = '';
+        const title = document.getElementById('mainTitle');
+        const backBtn = document.getElementById('btnBack');
+        const searchBox = document.getElementById('searchSection');
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         
-        back.style.visibility = (cur.level === 'ecuries') ? 'hidden' : 'visible';
-        document.getElementById('searchBox').style.display = (cur.level === 'ecuries') ? 'flex' : 'none';
+        grid.innerHTML = '';
+        backBtn.style.visibility = (state.view === 'ecuries') ? 'hidden' : 'visible';
+        searchBox.style.display = (state.view === 'ecuries') ? 'block' : 'none';
 
-        if (cur.level === 'ecuries') {
-            document.getElementById('title').innerText = "Mes Écuries";
-            data.filter(e => e.nom.toLowerCase().includes(search)).forEach((ec, i) => grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`, 'setImgEc'));
-        } else if (cur.level === 'clients') {
-            document.getElementById('title').innerText = data[cur.ec].nom;
-            data[cur.ec].clients.forEach((cl, i) => grid.innerHTML += card(i, cl.nom, cl.img, '👤', `${cl.chevaux.length} Chevaux`, `goCl(${i})`, 'setImgCl'));
-        } else {
-            const hList = data[cur.ec].clients[cur.cl].chevaux;
-            document.getElementById('title').innerText = data[cur.ec].clients[cur.cl].nom;
-            hList.forEach((ch, i) => {
-                let hist = '';
+        if (state.view === 'ecuries') {
+            title.innerText = "Mes Écuries";
+            data.filter(e => e.nom.toLowerCase().includes(searchTerm)).forEach((ec, i) => {
+                grid.innerHTML += createCard(ec.nom, ec.img, '🏠', `${ec.clients ? ec.clients.length : 0} Clients`, i, `openEcurie(${i})`, 'setCoverEc');
+            });
+        } 
+        else if (state.view === 'clients') {
+            const currentEc = data[state.ecIdx];
+            title.innerText = currentEc.nom;
+            currentEc.clients.forEach((cl, i) => {
+                grid.innerHTML += createCard(cl.nom, cl.img, '👤', `${cl.chevaux ? cl.chevaux.length : 0} Chevaux`, i, `openClient(${i})`, 'setCoverCl');
+            });
+        } 
+        else if (state.view === 'chevaux') {
+            const currentCl = data[state.ecIdx].clients[state.clIdx];
+            title.innerText = currentCl.nom;
+            currentCl.chevaux.forEach((ch, i) => {
+                let historyHTML = '';
                 const album = ch.album || [];
                 const notes = ch.notes || [];
-                const dates = [...new Set([...album.map(p=>p.date), ...notes.map(n=>n.date)])].sort((a,b)=>b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
-                
-                dates.forEach(day => {
-                    hist += `<div class="date-folder"><span class="folder-title">📅 Passage du ${day}</span><div class="photo-grid">`;
-                    album.filter(p=>p.date === day).forEach(p => hist += `<img src="${p.src}" class="thumb" onclick="view('${p.src}')">`);
-                    hist += `</div>`;
-                    notes.filter(n=>n.date === day).forEach(n => hist += `<div class="note-bubble">🎤 ${n.txt}</div>`);
-                    hist += `</div>`;
+                const dates = [...new Set([...album.map(p=>p.date), ...notes.map(n=>n.date)])].sort((a,b) => b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
+
+                dates.forEach(d => {
+                    historyHTML += `<div class="folder"><span class="folder-title">📅 Passage du ${d}</span><div class="pic-grid">`;
+                    album.filter(p => p.date === d).forEach(p => {
+                        historyHTML += `<img src="${p.src}" onclick="window.open('${p.src}')">`;
+                    });
+                    historyHTML += `</div>`;
+                    notes.filter(n => n.date === d).forEach(n => {
+                        historyHTML += `<div class="note-bubble">🎤 ${n.txt}</div>`;
+                    });
+                    historyHTML += `</div>`;
                 });
 
-                grid.innerHTML += `<div class="card full-card">
-                    <div class="img-box" style="aspect-ratio:16/9">
-                        ${ch.img ? `<img src="${ch.img}">` : '🐎'}
-                        <label class="cam-overlay">📸<input type="file" accept="image/*" style="display:none" onchange="setImgCh(event, ${i})"></label>
-                    </div>
-                    <span style="font-size:22px; font-weight:bold;">${ch.nom}</span>
-                    <div class="btn-row">
-                        <button class="btn-act" style="background:var(--blue)" onclick="startVocal(${i})">🎤 Vocal</button>
-                        <label class="btn-act" style="background:var(--green)">📸 Photo<input type="file" accept="image/*" style="display:none" onchange="addPic(event, ${i})"></label>
-                        <button class="btn-act" style="background:var(--red); flex:0.2" onclick="remove(${i})">🗑️</button>
-                    </div>
-                    <div>${hist || '<p style="color:gray;text-align:center">Aucun historique.</p>'}</div>
-                </div>`;
+                grid.innerHTML += `
+                    <div class="card full-card">
+                        <div class="img-box" style="aspect-ratio:16/9; font-size:60px;">
+                            ${ch.img ? `<img src="${ch.img}">` : '🐎'}
+                            <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setCoverCh(event, ${i})"></label>
+                        </div>
+                        <h2 style="margin:15px 0 5px 0; font-size:24px;">${ch.nom}</h2>
+                        <div class="btn-row">
+                            <label class="btn btn-photo">📸 Photo<input type="file" accept="image/*" style="display:none" onchange="addPhotoToAlbum(event, ${i})"></label>
+                            <button class="btn btn-vocal" onclick="addVocalNote(${i})">🎤 Vocal</button>
+                            <button class="btn btn-del" onclick="deleteItem(${i})">🗑️</button>
+                        </div>
+                        ${historyHTML || '<p style="text-align:center; color:gray; margin-top:20px;">Aucun historique pour ce cheval.</p>'}
+                    </div>`;
             });
         }
     }
 
-    function card(idx, nom, img, emoji, sub, act, func) {
-        return `<div class="card">
-            <div class="img-box" onclick="${act}">
-                ${img ? `<img src="${img}">` : emoji}
-                <label class="cam-overlay" onclick="event.stopPropagation()">📸<input type="file" accept="image/*" style="display:none" onchange="${func}(event, ${idx})"></label>
-            </div>
-            <div onclick="${act}"><strong>${nom}</strong><br><small style="color:gray">${sub}</small></div>
-        </div>`;
+    function createCard(nom, img, emoji, sub, idx, clickFn, camFn) {
+        return `
+            <div class="card">
+                <div class="img-box" onclick="${clickFn}">
+                    ${img ? `<img src="${img}">` : emoji}
+                    <label class="cam-badge" onclick="event.stopPropagation()">📸<input type="file" accept="image/*" style="display:none" onchange="${camFn}(event, ${idx})"></label>
+                </div>
+                <div onclick="${clickFn}" style="margin-top:10px;">
+                    <div style="font-weight:bold; font-size:16px;">${nom}</div>
+                    <div style="font-size:12px; color:gray; margin-top:4px;">${sub}</div>
+                </div>
+            </div>`;
     }
 
-    function goEc(i) { cur.ec = i; cur.level = 'clients'; render(); }
-    function goCl(i) { cur.cl = i; cur.level = 'chevaux'; render(); }
-    function goBack() { cur.level = (cur.level==='chevaux') ? 'clients' : 'ecuries'; render(); }
+    function openEcurie(i) { state.ecIdx = i; state.view = 'clients'; render(); }
+    function openClient(i) { state.clIdx = i; state.view = 'chevaux'; render(); }
+    function goBack() {
+        if (state.view === 'chevaux') state.view = 'clients';
+        else if (state.view === 'clients') state.view = 'ecuries';
+        render();
+    }
 
-    function setImgEc(e, i) { const r = new FileReader(); r.onload = () => { data[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    function setImgCl(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    function setImgCh(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[cur.cl].chevaux[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    
-    function addPic(e, i) {
-        const r = new FileReader(); r.onload = () => {
-            const h = data[cur.ec].clients[cur.cl].chevaux[i];
-            if(!h.album) h.album = [];
-            h.album.push({ src: r.result, date: new Date().toLocaleDateString('fr-FR') });
+    function addNewItem() {
+        const n = prompt("Nom :");
+        if (!n) return;
+        if (state.view === 'ecuries') data.push({ nom: n, img: '', clients: [] });
+        else if (state.view === 'clients') data[state.ecIdx].clients.push({ nom: n, img: '', chevaux: [] });
+        else if (state.view === 'chevaux') data[state.ecIdx].clients[state.clIdx].chevaux.push({ nom: n, img: '', album: [], notes: [] });
+        save();
+    }
+
+    function setCoverEc(e, i) { handleFile(e, (res) => { data[i].img = res; save(); }); }
+    function setCoverCl(e, i) { handleFile(e, (res) => { data[state.ecIdx].clients[i].img = res; save(); }); }
+    function setCoverCh(e, i) { handleFile(e, (res) => { data[state.ecIdx].clients[state.clIdx].chevaux[i].img = res; save(); }); }
+
+    function addPhotoToAlbum(e, i) {
+        handleFile(e, (res) => {
+            const ch = data[state.ecIdx].clients[state.clIdx].chevaux[i];
+            ch.album.push({ src: res, date: new Date().toLocaleDateString('fr-FR') });
             save();
-        }; r.readAsDataURL(e.target.files[0]);
+        });
     }
 
-    function startVocal(i) {
-        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if(!Rec) return alert("Micro non supporté");
+    function addVocalNote(i) {
+        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Rec) return alert("Vocal non supporté sur ce navigateur.");
         const r = new Rec(); r.lang = 'fr-FR'; r.start();
-        r.onresult = (e) => { 
-            const h = data[cur.ec].clients[cur.cl].chevaux[i];
-            if(!h.notes) h.notes = [];
-            h.notes.push({ txt: e.results[0][0].transcript, date: new Date().toLocaleDateString('fr-FR') });
+        r.onresult = (e) => {
+            const ch = data[state.ecIdx].clients[state.clIdx].chevaux[i];
+            ch.notes.push({ txt: e.results[0][0].transcript, date: new Date().toLocaleDateString('fr-FR') });
             save();
         };
     }
 
-    function view(s) { document.getElementById('viewerImg').src = s; document.getElementById('viewer').style.display='flex'; }
-    function save() { localStorage.setItem('marechal_v22', JSON.stringify(data)); render(); }
-    function showAdd() { document.getElementById('modal').style.display = 'flex'; }
-    function hideAdd() { document.getElementById('modal').style.display = 'none'; }
-    function doAdd() {
-        const n = document.getElementById('mNom').value; if(!n) return;
-        if(cur.level==='ecuries') data.push({nom:n, img:'', clients:[]});
-        else if(cur.level==='clients') data[cur.ec].clients.push({nom:n, img:'', chevaux:[]});
-        else data[cur.ec].clients[cur.cl].chevaux.push({nom:n, img:'', notes:[], album:[]});
-        save(); hideAdd(); document.getElementById('mNom').value='';
+    function handleFile(e, callback) {
+        const f = e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => callback(r.result);
+        r.readAsDataURL(f);
     }
-    function remove(i) { if(confirm("Supprimer ?")) { 
-        if(cur.level==='ecuries') data.splice(i,1);
-        else if(cur.level==='clients') data[cur.ec].clients.splice(i,1);
-        else data[cur.ec].clients[cur.cl].chevaux.splice(i,1);
-        save(); 
-    } }
+
+    function save() { localStorage.setItem('marechal_v25', JSON.stringify(data)); render(); }
+
+    function deleteItem(i) {
+        if (confirm("Supprimer définitivement ?")) {
+            if (state.view === 'ecuries') data.splice(i, 1);
+            else if (state.view === 'clients') data[state.ecIdx].clients.splice(i, 1);
+            else if (state.view === 'chevaux') data[state.ecIdx].clients[state.clIdx].chevaux.splice(i, 1);
+            save();
+        }
+    }
+
     render();
 </script>
 </body>
 </html>
+
