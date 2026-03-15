@@ -137,4 +137,48 @@
     function goBack() { cur.level = (cur.level==='chevaux') ? 'clients' : 'ecuries'; render(); }
 
     function setImgEc(e, i) { const r = new FileReader(); r.onload = () => { data[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    function setImgCl(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[i].img
+    function setImgCl(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
+    function setImgCh(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[cur.cl].chevaux[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
+    
+    function addPic(e, i) {
+        const r = new FileReader(); r.onload = () => {
+            const h = data[cur.ec].clients[cur.cl].chevaux[i];
+            if(!h.album) h.album = [];
+            h.album.push({ src: r.result, date: new Date().toLocaleDateString('fr-FR') });
+            save();
+        }; r.readAsDataURL(e.target.files[0]);
+    }
+
+    function startVocal(i) {
+        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+        if(!Rec) return alert("Micro non supporté");
+        const r = new Rec(); r.lang = 'fr-FR'; r.start();
+        r.onresult = (e) => { 
+            const h = data[cur.ec].clients[cur.cl].chevaux[i];
+            if(!h.notes) h.notes = [];
+            h.notes.push({ txt: e.results[0][0].transcript, date: new Date().toLocaleDateString('fr-FR') });
+            save();
+        };
+    }
+
+    function view(s) { document.getElementById('viewerImg').src = s; document.getElementById('viewer').style.display='flex'; }
+    function save() { localStorage.setItem('marechal_v22', JSON.stringify(data)); render(); }
+    function showAdd() { document.getElementById('modal').style.display = 'flex'; }
+    function hideAdd() { document.getElementById('modal').style.display = 'none'; }
+    function doAdd() {
+        const n = document.getElementById('mNom').value; if(!n) return;
+        if(cur.level==='ecuries') data.push({nom:n, img:'', clients:[]});
+        else if(cur.level==='clients') data[cur.ec].clients.push({nom:n, img:'', chevaux:[]});
+        else data[cur.ec].clients[cur.cl].chevaux.push({nom:n, img:'', notes:[], album:[]});
+        save(); hideAdd(); document.getElementById('mNom').value='';
+    }
+    function remove(i) { if(confirm("Supprimer ?")) { 
+        if(cur.level==='ecuries') data.splice(i,1);
+        else if(cur.level==='clients') data[cur.ec].clients.splice(i,1);
+        else data[cur.ec].clients[cur.cl].chevaux.splice(i,1);
+        save(); 
+    } }
+    render();
+</script>
+</body>
+</html>
