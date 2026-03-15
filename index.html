@@ -5,51 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Maréchal Pro</title>
-    
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
     <style>
-        :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --gray: #8e8e93; --gold: #fbc02d; --green: #34c759; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #1c1c1e; }
+        :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --green: #34c759; --gold: #fbc02d; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
         
-        header { background: white; padding: 15px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #d1d1d6; display: flex; align-items: center; gap: 15px; height: 60px; box-sizing: border-box; }
-        
-        /* Bouton retour plus grand */
-        .back-btn { background: #e5e5ea; border: none; width: 50px; height: 45px; border-radius: 12px; font-size: 24px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; }
-        
+        header { background: white; padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #d1d1d6; position: sticky; top: 0; z-index: 100; height: 65px; box-sizing: border-box; }
+        .back-btn { background: #e5e5ea; border: none; width: 65px; height: 45px; border-radius: 12px; font-size: 25px; font-weight: bold; color: var(--blue); display: flex; align-items: center; justify-content: center; }
         h1 { font-size: 18px; margin: 0; flex-grow: 1; font-weight: 800; }
-        .logo-img { height: 45px; width: 45px; border-radius: 10px; object-fit: cover; background: #eee; }
+
+        .search-bar { padding: 10px 15px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
+        .search-bar input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; outline: none; }
 
         .container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        /* Cartes et images */
-        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; }
+        .card { background: white; border-radius: 22px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; }
         .img-box { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 8px; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Icône photo sur les vignettes */
-        .cam-overlay { position: absolute; bottom: 5px; right: 5px; background: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 16px; z-index: 10; }
+        .cam-overlay { position: absolute; bottom: 8px; right: 8px; background: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 18px; z-index: 10; }
 
         .full-card { grid-column: span 2; text-align: left; padding: 15px; }
         .date-folder { background: #fff; border-radius: 18px; padding: 15px; margin-bottom: 15px; border: 1px solid #e5e5ea; }
-        .folder-title { font-weight: bold; color: #555; font-size: 14px; margin-bottom: 10px; display: block; }
+        .folder-title { font-weight: bold; color: #555; font-size: 14px; margin-bottom: 10px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         
-        .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
         .thumb { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; background: #f0f0f0; }
-        
+        .note-bubble { background: #fffde7; padding: 10px; border-radius: 12px; margin-top: 10px; border-left: 4px solid var(--gold); font-size: 14px; }
+
         #viewer { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:1000; align-items:center; justify-content:center; }
-        #viewer img { max-width: 100%; max-height: 80%; }
+        #viewer img { max-width: 100%; max-height: 85%; }
 
         .btn-row { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
-        .btn-act { flex: 1; min-width: 80px; padding: 12px; border: none; border-radius: 12px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-act { flex: 1; min-width: 90px; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
 
         .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 65px; height: 65px; border-radius: 50%; font-size: 35px; box-shadow: 0 5px 15px rgba(0,122,255,0.4); z-index: 200; }
         #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center; }
         .modal-box { background:white; padding:25px; border-radius:24px; width:85%; }
-        input { width:100%; padding:12px; margin:8px 0; border:1px solid #ddd; border-radius:10px; }
     </style>
 </head>
 <body>
@@ -57,62 +47,62 @@
 <header>
     <button class="back-btn" id="btnBack" onclick="goBack()" style="visibility:hidden">‹</button>
     <h1 id="title">Maréchal Pro</h1>
-    <img src="logo.png" class="logo-img" onerror="this.src='https://via.placeholder.com/50?text=Logo'">
 </header>
+
+<div id="searchBox" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Rechercher écurie..." oninput="render()">
+</div>
 
 <div class="container" id="grid"></div>
 <button class="fab" onclick="showAdd()">+</button>
 
-<div id="viewer">
-    <div style="position:absolute; top:30px; right:20px; color:white; font-size:40px;" onclick="closeGallery()">&times;</div>
-    <img id="viewerImg">
+<div id="viewer" onclick="this.style.display='none'">
+    <img id="viewerImg" src="">
 </div>
 
 <div id="modal">
     <div class="modal-box">
         <h3>Nouveau</h3>
-        <input type="text" id="mNom" placeholder="Nom...">
+        <input type="text" id="mNom" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:16px;" placeholder="Nom...">
         <button onclick="doAdd()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:12px; font-weight:bold; margin-top:10px;">VALIDER</button>
         <button onclick="hideAdd()" style="width:100%; margin-top:10px; background:none; border:none; color:var(--red);">Annuler</button>
     </div>
 </div>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('marechal_v18')) || [];
+    let data = JSON.parse(localStorage.getItem('marechal_v22')) || [];
     let cur = { level: 'ecuries', ec: null, cl: null };
 
     function render() {
         const grid = document.getElementById('grid');
-        const title = document.getElementById('title');
+        const search = document.getElementById('searchInput').value.toLowerCase();
         const back = document.getElementById('btnBack');
         grid.innerHTML = '';
         
         back.style.visibility = (cur.level === 'ecuries') ? 'hidden' : 'visible';
+        document.getElementById('searchBox').style.display = (cur.level === 'ecuries') ? 'flex' : 'none';
 
         if (cur.level === 'ecuries') {
-            title.innerText = "Mes Écuries";
-            data.forEach((ec, i) => grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`, 'setImgEc'));
-        } 
-        else if (cur.level === 'clients') {
-            title.innerText = data[cur.ec].nom;
+            document.getElementById('title').innerText = "Mes Écuries";
+            data.filter(e => e.nom.toLowerCase().includes(search)).forEach((ec, i) => grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`, 'setImgEc'));
+        } else if (cur.level === 'clients') {
+            document.getElementById('title').innerText = data[cur.ec].nom;
             data[cur.ec].clients.forEach((cl, i) => grid.innerHTML += card(i, cl.nom, cl.img, '👤', `${cl.chevaux.length} Chevaux`, `goCl(${i})`, 'setImgCl'));
-        } 
-        else {
+        } else {
             const hList = data[cur.ec].clients[cur.cl].chevaux;
-            title.innerText = data[cur.ec].clients[cur.cl].nom;
+            document.getElementById('title').innerText = data[cur.ec].clients[cur.cl].nom;
             hList.forEach((ch, i) => {
-                let historyHTML = '';
-                const allPics = ch.album || [];
-                const allDates = [...new Set([...allPics.map(p=>p.date), ...(ch.notes||[]).map(n=>n.date)])].sort((a,b)=>b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
+                let hist = '';
+                const album = ch.album || [];
+                const notes = ch.notes || [];
+                const dates = [...new Set([...album.map(p=>p.date), ...notes.map(n=>n.date)])].sort((a,b)=>b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
                 
-                allDates.forEach(day => {
-                    historyHTML += `<div class="date-folder"><span class="folder-title">Passage du ${day}</span>`;
-                    const dayPics = allPics.filter(p=>p.date === day);
-                    if(dayPics.length > 0) {
-                        historyHTML += `<div class="photo-grid">` + dayPics.map(p => `<img src="${p.src}" class="thumb" onclick="view('${p.src}')">`).join('') + `</div>`;
-                    }
-                    (ch.notes||[]).filter(n=>n.date === day).forEach(n => historyHTML += `<div class="note-bubble">${n.txt}</div>`);
-                    historyHTML += `</div>`;
+                dates.forEach(day => {
+                    hist += `<div class="date-folder"><span class="folder-title">📅 Passage du ${day}</span><div class="photo-grid">`;
+                    album.filter(p=>p.date === day).forEach(p => hist += `<img src="${p.src}" class="thumb" onclick="view('${p.src}')">`);
+                    hist += `</div>`;
+                    notes.filter(n=>n.date === day).forEach(n => hist += `<div class="note-bubble">🎤 ${n.txt}</div>`);
+                    hist += `</div>`;
                 });
 
                 grid.innerHTML += `<div class="card full-card">
@@ -120,90 +110,31 @@
                         ${ch.img ? `<img src="${ch.img}">` : '🐎'}
                         <label class="cam-overlay">📸<input type="file" accept="image/*" style="display:none" onchange="setImgCh(event, ${i})"></label>
                     </div>
-                    <span style="font-size:20px; font-weight:bold;">${ch.nom}</span>
+                    <span style="font-size:22px; font-weight:bold;">${ch.nom}</span>
                     <div class="btn-row">
                         <button class="btn-act" style="background:var(--blue)" onclick="startVocal(${i})">🎤 Vocal</button>
-                        <label class="btn-act" style="background:var(--green)">📸 Photo<input type="file" accept="image/*" style="display:none" onchange="addAlbumPic(event, ${i})"></label>
+                        <label class="btn-act" style="background:var(--green)">📸 Photo<input type="file" accept="image/*" style="display:none" onchange="addPic(event, ${i})"></label>
                         <button class="btn-act" style="background:var(--red); flex:0.2" onclick="remove(${i})">🗑️</button>
                     </div>
-                    <div>${historyHTML || '<p style="color:gray;text-align:center">Aucun dossier.</p>'}</div>
+                    <div>${hist || '<p style="color:gray;text-align:center">Aucun historique.</p>'}</div>
                 </div>`;
             });
         }
     }
 
-    function card(idx, nom, img, emoji, sub, act, imgFunc) {
+    function card(idx, nom, img, emoji, sub, act, func) {
         return `<div class="card">
             <div class="img-box" onclick="${act}">
                 ${img ? `<img src="${img}">` : emoji}
-                <label class="cam-overlay" onclick="event.stopPropagation()">📸<input type="file" accept="image/*" style="display:none" onchange="${imgFunc}(event, ${idx})"></label>
+                <label class="cam-overlay" onclick="event.stopPropagation()">📸<input type="file" accept="image/*" style="display:none" onchange="${func}(event, ${idx})"></label>
             </div>
-            <div onclick="${act}">
-                <div style="font-weight:bold">${nom}</div>
-                <div style="font-size:11px;color:gray">${sub}</div>
-            </div>
+            <div onclick="${act}"><strong>${nom}</strong><br><small style="color:gray">${sub}</small></div>
         </div>`;
     }
 
-    // NAVIGATION
     function goEc(i) { cur.ec = i; cur.level = 'clients'; render(); }
     function goCl(i) { cur.cl = i; cur.level = 'chevaux'; render(); }
-    function goBack() { 
-        if(cur.level === 'chevaux') cur.level = 'clients';
-        else if(cur.level === 'clients') cur.level = 'ecuries';
-        render(); 
-    }
+    function goBack() { cur.level = (cur.level==='chevaux') ? 'clients' : 'ecuries'; render(); }
 
-    // PHOTOS ÉCURIES / CLIENTS / CHEVAUX
     function setImgEc(e, i) { const r = new FileReader(); r.onload = () => { data[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    function setImgCl(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    function setImgCh(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[cur.cl].chevaux[i].img = r.result; save(); }; r.readAsDataURL(e.target.files[0]); }
-    
-    function addAlbumPic(e, i) {
-        const r = new FileReader();
-        r.onload = () => {
-            const h = data[cur.ec].clients[cur.cl].chevaux[i];
-            if(!h.album) h.album = [];
-            h.album.push({ src: r.result, date: new Date().toLocaleDateString('fr-FR') });
-            save();
-        };
-        r.readAsDataURL(e.target.files[0]);
-    }
-
-    function view(src) { document.getElementById('viewerImg').src = src; document.getElementById('viewer').style.display='flex'; }
-    function closeGallery() { document.getElementById('viewer').style.display='none'; }
-
-    // ACTIONS
-    function showAdd() { document.getElementById('modal').style.display = 'flex'; }
-    function hideAdd() { document.getElementById('modal').style.display = 'none'; }
-    function doAdd() {
-        const nom = document.getElementById('mNom').value; if(!nom) return;
-        if(cur.level === 'ecuries') data.push({nom, img:'', clients:[]});
-        else if(cur.level === 'clients') data[cur.ec].clients.push({nom, img:'', chevaux:[]});
-        else data[cur.ec].clients[cur.cl].chevaux.push({nom, img:'', notes:[], album:[]});
-        save(); hideAdd(); document.getElementById('mNom').value='';
-    }
-
-    function startVocal(i) {
-        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if(!Rec) return alert("Micro non supporté");
-        const r = new Rec(); r.lang = 'fr-FR'; r.start();
-        r.onresult = (e) => { 
-            const h = data[cur.ec].clients[cur.cl].chevaux[i];
-            if(!h.notes) h.notes = [];
-            h.notes.push({ txt: e.results[0][0].transcript, date: new Date().toLocaleDateString('fr-FR') });
-            save();
-        };
-    }
-
-    function save() { localStorage.setItem('marechal_v18', JSON.stringify(data)); render(); }
-    function remove(i) { if(confirm("Supprimer ?")) { 
-        if(cur.level==='ecuries') data.splice(i,1);
-        else if(cur.level==='clients') data[cur.ec].clients.splice(i,1);
-        else data[cur.ec].clients[cur.cl].chevaux.splice(i,1);
-        save(); 
-    } }
-    render();
-</script>
-</body>
-</html>
+    function setImgCl(e, i) { const r = new FileReader(); r.onload = () => { data[cur.ec].clients[i].img
