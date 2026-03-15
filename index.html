@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maréchal Pro</title>
+    <style>
+        :root { --blue: #007aff; --bg: #ffffff; --gray: #8e8e93; --light: #f2f2f7; --red: #ff3b30; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px; padding-bottom: 100px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; background: white; z-index: 10; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .back-btn { background: none; border: none; color: var(--blue); font-size: 18px; cursor: pointer; display: none; font-weight: 600; }
+        h1 { font-size: 24px; margin: 0; flex-grow: 1; }
+        .logo-small { height: 45px; border-radius: 8px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .album { display: flex; flex-direction: column; background: #fff; cursor: pointer; }
+        .cover { width: 100%; aspect-ratio: 1/1; background: var(--light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; overflow: hidden; border: 1px solid #eee; }
+        .cover img { width: 100%; height: 100%; object-fit: cover; }
+        .name { font-weight: 600; font-size: 15px; margin: 8px 0 0 0; }
+        .sub { font-size: 12px; color: var(--gray); }
+        .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 15px; width: 80%; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-v { background: var(--blue); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="back-btn" id="backBtn" onclick="retour()">‹ Retour</button>
+    <h1 id="title">Écuries</h1>
+    <img src="Florian Le Gallée (noir sur transparent).png" class="logo-small" onerror="this.src='https://via.placeholder.com/50?text=FP'">
+</header>
+
+<div class="grid" id="mainGrid"></div>
+<button class="fab" onclick="ouvrirModal()">+</button>
+
+<div id="modal">
+    <div class="modal-content">
+        <h3 id="mTitle">Nouvelle Écurie</h3>
+        <input type="text" id="nomInput" placeholder="Nom...">
+        <button class="btn-v" onclick="ajouter()">Ajouter</button>
+        <button onclick="fermerModal()" style="width:100%; background:none; border:none; margin-top:10px; color:var(--red);">Annuler</button>
+    </div>
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('m_db')) || [];
+    let state = { v: 'ecuries', ec: null, cl: null };
+
+    function render() {
+        const g = document.getElementById('mainGrid');
+        const t = document.getElementById('title');
+        const b = document.getElementById('backBtn');
+        g.innerHTML = '';
+        b.style.display = state.v === 'ecuries' ? 'none' : 'block';
+
+        if (state.v === 'ecuries') {
+            t.innerText = "Écuries";
+            db.forEach((e, i) => {
+                g.innerHTML += `<div class="album" onclick="goCl(${i})"><div class="cover">🏠</div><p class="name">${e.n}</p><p class="sub">${e.c.length} clients</p></div>`;
+            });
+        } else if (state.v === 'clients') {
+            t.innerText = db[state.ec].n;
+            db[state.ec].c.forEach((c, i) => {
+                g.innerHTML += `<div class="album" onclick="goCh(${i})"><div class="cover">👤</div><p class="name">${c.n}</p><p class="sub">${c.h.length} chevaux</p></div>`;
+            });
+        } else {
+            t.innerText = db[state.ec].c[state.cl].n;
+            db[state.ec].c[state.cl].h.forEach((h, i) => {
+                g.innerHTML += `<div class="album"><div class="cover">🐎</div><p class="name">${h.n}</p></div>`;
+            });
+        }
+    }
+
+    function goCl(i) { state.ec = i; state.v = 'clients'; render(); }
+    function goCh(i) { state.cl = i; state.v = 'chevaux'; render(); }
+    function retour() { if(state.v === 'chevaux') state.v = 'clients'; else state.v = 'ecuries'; render(); }
+    function ouvrirModal() { document.getElementById('modal').style.display = 'flex'; }
+    function fermerModal() { document.getElementById('modal').style.display = 'none'; }
+    
+    function ajouter() {
+        const val = document.getElementById('nomInput').value;
+        if(!val) return;
+        if(state.v === 'ecuries') db.push({n:val, c:[]});
+        else if(state.v === 'clients') db[state.ec].c.push({n:val, h:[]});
+        else db[state.ec].c[state.cl].h.push({n:val});
+        localStorage.setItem('m_db', JSON.stringify(db));
+        document.getElementById('nomInput').value = '';
+        fermerModal(); render();
+    }
+    render();
+</script>
+</body>
+</html>
