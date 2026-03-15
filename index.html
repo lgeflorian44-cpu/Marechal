@@ -1,196 +1,238 @@
-  
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MARECHAL PRO V26</title>
+    <title>MARECHAL PRO - GESTION EXPERT</title>
     <style>
-        :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --green: #34c759; --gold: #ffcc00; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 100px; }
+        :root { --blue: #007aff; --orange: #ff9500; --green: #34c759; --red: #ff3b30; --dark: #1c1c1e; --gray: #8e8e93; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f2f2f7; margin: 0; padding-bottom: env(safe-area-inset-bottom, 20px); color: var(--dark); overflow-x: hidden; }
         
-        /* HEADER STATIQUE */
-        header { background: white; padding: 10px 15px; display: flex; align-items: center; border-bottom: 1px solid #ccc; position: sticky; top: 0; z-index: 1000; height: 60px; }
-        .back-btn { background: #e5e5ea; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; color: var(--blue); margin-right: 10px; }
-        h1 { font-size: 18px; flex: 1; text-align: center; margin: 0; }
-
-        /* RECHERCHE AVEC VOCAL */
-        .search-container { padding: 10px; background: white; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid #ddd; }
-        #searchInput { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-size: 16px; }
-        .vocal-search-btn { background: var(--blue); border: none; border-radius: 10px; color: white; padding: 10px; font-size: 20px; width: 45px; height: 45px; }
-
-        /* GRILLE PRINCIPALE */
-        .container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; border-radius: 20px; padding: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: relative; }
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #ddd; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        /* Navigation & Labels */
+        .nav-header { background: white; border-bottom: 1px solid #d1d1d6; position: sticky; top: 0; z-index: 1000; padding: 10px 15px; }
+        .nav-top { display: flex; align-items: center; justify-content: space-between; height: 50px; }
+        .btn-back { background: #e5e5ea; border: none; padding: 10px 18px; border-radius: 12px; color: var(--blue); font-weight: bold; font-size: 15px; }
+        .level-badge { font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; color: white; margin-bottom: 4px; display: inline-block; }
         
-        /* BOUTON PHOTO SUR ICONE */
-        .cam-badge { position: absolute; bottom: 5px; right: 5px; background: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); font-size: 18px; }
+        /* Couleurs par niveau */
+        .lvl-ecurie { background: var(--blue); }
+        .lvl-client { background: var(--orange); }
+        .lvl-cheval { background: var(--green); }
 
-        /* FICHE CHEVAL & HISTORIQUE */
-        .full-card { grid-column: span 2; text-align: left; padding: 15px; }
-        .folder { background: #f9f9f9; border-radius: 15px; padding: 15px; margin-top: 15px; border: 1px solid #ddd; }
-        .folder-date { font-weight: bold; color: #555; border-bottom: 1px solid #eee; margin-bottom: 10px; display: block; }
-        .pic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 10px 0; }
-        .pic-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; }
-        .note-bubble { background: #fff9c4; padding: 10px; border-radius: 10px; margin-top: 5px; border-left: 4px solid var(--gold); }
+        /* Barre de recherche avec Micro */
+        .search-block { padding: 12px 15px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
+        .search-input-wrapper { position: relative; flex: 1; }
+        #searchInput { width: 100%; padding: 12px 40px 12px 12px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; background: #f2f2f7; box-sizing: border-box; }
+        .btn-mic-search { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: none; background: none; font-size: 20px; color: var(--blue); }
 
-        /* BOUTONS ACTIONS */
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .action-btn { flex: 1; padding: 15px; border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .bg-green { background: var(--green); }
-        .bg-blue { background: var(--blue); }
-        .bg-red { background: var(--red); flex: 0.3; }
+        /* Grille Pro */
+        .content-grid { padding: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .card-pro { background: white; border-radius: 22px; padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); position: relative; transition: transform 0.2s; }
+        .card-pro:active { transform: scale(0.96); }
+        .item-thumb { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Fiche Cheval Full */
+        .card-full { grid-column: span 2; text-align: left; }
+        .folder-day { background: #ffffff; border: 1px solid #e5e5ea; border-radius: 18px; padding: 15px; margin-top: 20px; }
+        .folder-date { font-weight: bold; color: var(--gray); font-size: 13px; margin-bottom: 12px; display: block; border-bottom: 1px solid #f2f2f7; padding-bottom: 6px; }
+        .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .gallery img { width: 100%; aspect-ratio: 1/1; border-radius: 10px; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .note-vocal { background: #fff9c4; padding: 12px; border-radius: 14px; border-left: 5px solid #ffcc00; margin-top: 10px; font-size: 15px; color: #333; line-height: 1.4; }
 
-        .fab { position: fixed; bottom: 20px; right: 20px; background: var(--blue); color: white; border: none; width: 65px; height: 65px; border-radius: 50%; font-size: 35px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 2000; }
+        /* Boutons de commande */
+        .action-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-cmd { flex: 1; height: 55px; border: none; border-radius: 14px; color: white; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-photo { background: var(--green); }
+        .btn-note { background: var(--blue); }
+        .btn-trash { background: var(--red); flex: 0.3; }
+
+        .btn-add-float { position: fixed; bottom: 30px; right: 25px; background: var(--blue); color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 40px; box-shadow: 0 10px 30px rgba(0,122,255,0.4); z-index: 2000; }
+        
+        .cam-overlay { position: absolute; bottom: 8px; right: 8px; background: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 50; }
     </style>
 </head>
 <body>
 
-<header>
-    <button id="btnBack" class="back-btn" onclick="goBack()" style="display:none">‹ RETOUR</button>
-    <h1 id="mainTitle">Mes Écuries</h1>
-</header>
-
-<div id="searchBar" class="search-container">
-    <input type="text" id="searchInput" placeholder="Rechercher..." oninput="render()">
-    <button class="vocal-search-btn" onclick="startVocalSearch()">🎤</button>
+<div class="nav-header">
+    <div id="levelTag" class="level-badge lvl-ecurie">Niveau : Écuries</div>
+    <div class="nav-top">
+        <button id="btnBack" class="btn-back" onclick="navigateBack()" style="display:none">‹ RETOUR</button>
+        <h1 id="titleText">Mes Écuries</h1>
+        <div style="width:45px"></div>
+    </div>
 </div>
 
-<div id="grid" class="container"></div>
+<div id="searchSection" class="search-block">
+    <div class="search-input-wrapper">
+        <input type="text" id="searchInput" placeholder="Rechercher une écurie..." oninput="renderApp()">
+        <button class="btn-mic-search" onclick="voiceSearch()">🎤</button>
+    </div>
+</div>
 
-<button class="fab" onclick="addItem()">+</button>
+<div id="appGrid" class="content-grid"></div>
+
+<button class="btn-add-float" onclick="handleNew()">+</button>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('marechal_v26')) || [];
-    let state = { level: 'ecuries', ec: null, cl: null };
+    // Initialisation Base de Données
+    let storageKey = 'MARECHAL_PRO_V28';
+    let data = JSON.parse(localStorage.getItem(storageKey)) || [];
+    let state = { view: 'ECURIES', ecIndex: null, clIndex: null };
 
-    function render() {
-        const grid = document.getElementById('grid');
-        const s = document.getElementById('searchInput').value.toLowerCase();
-        grid.innerHTML = '';
+    // Moteur de rendu principal
+    function renderApp() {
+        const grid = document.getElementById('appGrid');
+        const title = document.getElementById('titleText');
+        const badge = document.getElementById('levelTag');
+        const backBtn = document.getElementById('btnBack');
+        const searchVal = document.getElementById('searchInput').value.toLowerCase();
         
-        document.getElementById('btnBack').style.display = (state.level === 'ecuries') ? 'none' : 'block';
-        document.getElementById('searchBar').style.display = (state.level === 'ecuries') ? 'flex' : 'none';
+        grid.innerHTML = '';
+        backBtn.style.display = (state.view === 'ECURIES') ? 'none' : 'block';
+        document.getElementById('searchSection').style.display = (state.view === 'ECURIES') ? 'flex' : 'none';
 
-        if (state.level === 'ecuries') {
-            document.getElementById('mainTitle').innerText = "Mes Écuries";
-            data.filter(e => e.nom.toLowerCase().includes(s)).forEach((e, i) => {
-                grid.innerHTML += `<div class="card">
-                    <div class="img-box" onclick="openEc(${i})">${e.img ? `<img src="${e.img}">` : '🏠'}</div>
-                    <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setImg(event,'ec',${i})"></label>
-                    <div onclick="openEc(${i})"><strong>${e.nom}</strong></div>
-                </div>`;
+        if (state.view === 'ECURIES') {
+            badge.className = "level-badge lvl-ecurie"; badge.innerText = "Niveau : Écuries";
+            title.innerText = "Mes Écuries";
+            data.filter(e => e.name.toLowerCase().includes(searchVal)).forEach((ec, i) => {
+                grid.innerHTML += createCard(ec.name, ec.img, '🏠', `toClients(${i})`, `changeIcon('EC', ${i})`, i);
             });
         } 
-        else if (state.level === 'clients') {
-            document.getElementById('mainTitle').innerText = data[state.ec].nom;
-            data[state.ec].clients.forEach((c, i) => {
-                grid.innerHTML += `<div class="card">
-                    <div class="img-box" onclick="openCl(${i})">${c.img ? `<img src="${c.img}">` : '👤'}</div>
-                    <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setImg(event,'cl',${i})"></label>
-                    <div onclick="openCl(${i})"><strong>${c.nom}</strong></div>
-                </div>`;
+        else if (state.view === 'CLIENTS') {
+            badge.className = "level-badge lvl-client"; badge.innerText = "Niveau : Clients";
+            title.innerText = data[state.ecIndex].name;
+            data[state.ecIndex].clients.forEach((cl, i) => {
+                grid.innerHTML += createCard(cl.name, cl.img, '👤', `toChevaux(${i})`, `changeIcon('CL', ${i})`, i);
             });
         } 
-        else if (state.level === 'chevaux') {
-            const client = data[state.ec].clients[state.cl];
-            document.getElementById('mainTitle').innerText = client.nom;
-            client.chevaux.forEach((h, i) => {
-                let history = '';
-                const items = [...(h.pics||[]).map(p=>({...p,t:'p'})), ...(h.notes||[]).map(n=>({...n,t:'n'}))];
-                const dates = [...new Set(items.map(it=>it.date))].sort((a,b)=>b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
+        else if (state.view === 'CHEVAUX') {
+            badge.className = "level-badge lvl-cheval"; badge.innerText = "Niveau : Chevaux";
+            const currentClient = data[state.ecIndex].clients[state.clIndex];
+            title.innerText = currentClient.name;
+            
+            currentClient.chevaux.forEach((ch, i) => {
+                let historyHTML = '';
+                const album = ch.album || [];
+                const notes = ch.notes || [];
+                const dates = [...new Set([...album.map(a => a.date), ...notes.map(n => n.date)])]
+                              .sort((a,b) => b.split('/').reverse().join('').localeCompare(a.split('/').reverse().join('')));
 
                 dates.forEach(d => {
-                    history += `<div class="folder"><span class="folder-date">📅 Passage du ${d}</span><div class="pic-grid">`;
-                    items.filter(it=>it.date===d && it.t==='p').forEach(p=> history += `<img src="${p.src}" onclick="window.open('${p.src}')">`);
-                    history += `</div>`;
-                    items.filter(it=>it.date===d && it.t==='n').forEach(n=> history += `<div class="note-bubble">🎤 ${n.txt}</div>`);
-                    history += `</div>`;
+                    historyHTML += `
+                    <div class="folder-day">
+                        <span class="folder-date">📅 DOSSIER DU ${d}</span>
+                        <div class="gallery">${album.filter(a => a.date === d).map(a => `<img src="${a.src}" onclick="window.open('${a.src}')">`).join('')}</div>
+                        ${notes.filter(n => n.date === d).map(n => `<div class="note-vocal">🎤 ${n.text}</div>`).join('')}
+                    </div>`;
                 });
 
-                grid.innerHTML += `<div class="card full-card">
-                    <div class="img-box" style="aspect-ratio:16/9">${h.img ? `<img src="${h.img}">` : '🐎'}
-                        <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setImg(event,'ch',${i})"></label>
+                grid.innerHTML += `
+                <div class="card-pro card-full">
+                    <div class="item-thumb" style="aspect-ratio:16/9; font-size:60px;">
+                        ${ch.img ? `<img src="${ch.img}">` : '🐎'}
+                        <label class="cam-overlay">📸<input type="file" accept="image/*" capture="camera" style="display:none" onchange="changeIcon('CH', ${i}, event)"></label>
                     </div>
-                    <h2>${h.nom}</h2>
-                    <div class="btn-group">
-                        <label class="action-btn bg-green">📸 PHOTO<input type="file" accept="image/*" style="display:none" onchange="addPhoto(event,${i})"></label>
-                        <button class="action-btn bg-blue" onclick="addVocal(${i})">🎤 NOTE</button>
-                        <button class="action-btn bg-red" onclick="del(${i})">🗑️</button>
+                    <h2 style="margin:15px 0 5px 0; font-size:22px;">#${i+1} - ${ch.name}</h2>
+                    <div class="action-row">
+                        <label class="btn-cmd btn-photo">📸 PHOTO DIRECTE<input type="file" accept="image/*" capture="camera" style="display:none" onchange="addPhotoToCheval(${i}, event)"></label>
+                        <button class="btn-cmd btn-note" onclick="addVocalNote(${i})">🎤 NOTE VOCALE</button>
+                        <button class="btn-cmd btn-trash" onclick="deleteItem(${i})">🗑️</button>
                     </div>
-                    ${history}
+                    ${historyHTML || '<p style="text-align:center; color:#8e8e93; margin-top:20px;">Aucun historique (Photo/Note)</p>'}
                 </div>`;
             });
         }
     }
 
-    // NAVIGATION
-    function openEc(i) { state.ec = i; state.level = 'clients'; render(); }
-    function openCl(i) { state.cl = i; state.level = 'chevaux'; render(); }
-    function goBack() { 
-        if(state.level==='chevaux') state.level='clients'; 
-        else if(state.level==='clients') state.level='ecuries'; 
-        render(); 
+    function createCard(name, img, emoji, clickFn, camFn, idx) {
+        return `
+        <div class="card-pro">
+            <div class="item-thumb" onclick="${clickFn}">${img ? `<img src="${img}">` : emoji}</div>
+            <label class="cam-overlay">📸<input type="file" accept="image/*" capture="camera" style="display:none" onchange="${camFn}(event)"></label>
+            <div onclick="${clickFn}" style="margin-top:10px;">
+                <div style="font-weight:bold; font-size:16px;">#${idx+1} - ${name}</div>
+            </div>
+        </div>`;
     }
 
-    // ACTIONS
-    function addItem() {
-        const n = prompt("Nom :"); if(!n) return;
-        if(state.level==='ecuries') data.push({nom:n, img:'', clients:[]});
-        else if(state.level==='clients') data[state.ec].clients.push({nom:n, img:'', chevaux:[]});
-        else data[state.ec].clients[state.cl].chevaux.push({nom:n, img:'', pics:[], notes:[]});
-        save();
+    // Logique de Navigation
+    function toClients(i) { state.ecIndex = i; state.view = 'CLIENTS'; renderApp(); }
+    function toChevaux(i) { state.clIndex = i; state.view = 'CHEVAUX'; renderApp(); }
+    function navigateBack() {
+        if (state.view === 'CHEVAUX') state.view = 'CLIENTS';
+        else if (state.view === 'CLIENTS') state.view = 'ECURIES';
+        renderApp();
     }
 
-    function setImg(e, type, i) {
+    // Création Éléments
+    function handleNew() {
+        const n = prompt("Nom du nouvel élément :"); if (!n) return;
+        if (state.view === 'ECURIES') data.push({ name: n, img: '', clients: [] });
+        else if (state.view === 'CLIENTS') data[state.ecIndex].clients.push({ name: n, img: '', chevaux: [] });
+        else if (state.view === 'CHEVAUX') data[state.ecIndex].clients[state.clIndex].chevaux.push({ name: n, img: '', album: [], notes: [] });
+        saveData();
+    }
+
+    // Gestion Images (Profil & Album)
+    function changeIcon(level, idx, event) {
+        const file = event ? event.target.files[0] : window.event.target.files[0];
+        if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
-            if(type==='ec') data[i].img = reader.result;
-            if(type==='cl') data[state.ec].clients[i].img = reader.result;
-            if(type==='ch') data[state.ec].clients[state.cl].chevaux[i].img = reader.result;
-            save();
-        }; reader.readAsDataURL(e.target.files[0]);
+            if (level === 'EC') data[idx].img = reader.result;
+            if (level === 'CL') data[state.ecIndex].clients[idx].img = reader.result;
+            if (level === 'CH') data[state.ecIndex].clients[state.clIndex].chevaux[idx].img = reader.result;
+            saveData();
+        }; reader.readAsDataURL(file);
     }
 
-    function addPhoto(e, i) {
+    function addPhotoToCheval(idx, event) {
+        const file = event.target.files[0]; if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
-            data[state.ec].clients[state.cl].chevaux[i].pics.push({src: reader.result, date: new Date().toLocaleDateString('fr-FR')});
-            save();
-        }; reader.readAsDataURL(e.target.files[0]);
+            const ch = data[state.ecIndex].clients[state.clIndex].chevaux[idx];
+            ch.album.push({ src: reader.result, date: new Date().toLocaleDateString('fr-FR') });
+            saveData();
+        }; reader.readAsDataURL(file);
     }
 
-    function addVocal(i) {
-        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return alert("Micro non supporté");
-        const r = new Rec(); r.lang = 'fr-FR'; r.start();
-        r.onresult = (e) => {
-            data[state.ec].clients[state.cl].chevaux[i].notes.push({txt: e.results[0][0].transcript, date: new Date().toLocaleDateString('fr-FR')});
-            save();
+    // Gestion Vocale Pro
+    function addVocalNote(idx) {
+        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Speech) return alert("Vocal non supporté sur ce téléphone.");
+        const rec = new Speech(); rec.lang = 'fr-FR';
+        rec.onresult = (e) => {
+            const text = e.results[0][0].transcript;
+            const ch = data[state.ecIndex].clients[state.clIndex].chevaux[idx];
+            ch.notes.push({ text: text, date: new Date().toLocaleDateString('fr-FR') });
+            saveData();
         };
+        rec.start();
     }
 
-    function startVocalSearch() {
-        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return;
-        const r = new Rec(); r.lang = 'fr-FR'; r.start();
-        r.onresult = (e) => {
-            document.getElementById('searchInput').value = e.results[0][0].transcript;
-            render();
-        };
+    function voiceSearch() {
+        const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Speech) return;
+        const rec = new Speech(); rec.lang = 'fr-FR';
+        rec.onresult = (e) => { document.getElementById('searchInput').value = e.results[0][0].transcript; renderApp(); };
+        rec.start();
     }
 
-    function del(i) { if(confirm("Supprimer ?")) {
-        if(state.level==='ecuries') data.splice(i,1);
-        else if(state.level==='clients') data[state.ec].clients.splice(i,1);
-        else data[state.ec].clients[state.cl].chevaux.splice(i,1);
-        save();
-    }}
+    // Suppression & Sauvegarde
+    function deleteItem(idx) {
+        if (confirm("Supprimer cet élément et tout son historique ?")) {
+            if (state.view === 'ECURIES') data.splice(idx, 1);
+            else if (state.view === 'CLIENTS') data[state.ecIndex].clients.splice(idx, 1);
+            else if (state.view === 'CHEVAUX') data[state.ecIndex].clients[state.clIndex].chevaux.splice(idx, 1);
+            saveData();
+        }
+    }
 
-    function save() { localStorage.setItem('marechal_v26', JSON.stringify(data)); render(); }
-    render();
+    function saveData() { localStorage.setItem(storageKey, JSON.stringify(data)); renderApp(); }
+
+    // Premier rendu
+    renderApp();
 </script>
 </body>
 </html>
