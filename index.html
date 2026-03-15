@@ -6,43 +6,38 @@
     <title>Maréchal Pro</title>
     
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Maréchal Pro">
-    <link rel="manifest" href="data:application/json;base64,ewogICJkZWZhdWx0X2xvY2FsZSI6ICJmciIsCiAgInNjb3BlIjogIi8iLAogICJzdGFydF91cmwiOiAiLmluZGV4Lmh0bWwiLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJpY29ucyI6IFsgeyAic3JjIjogImxvZ28ucG5nIiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmciIH0gXQp9">
 
     <style>
-        :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --gray: #8e8e93; --gold: #fbc02d; }
+        :root { --blue: #007aff; --bg: #f2f2f7; --red: #ff3b30; --gray: #8e8e93; --gold: #fbc02d; --green: #34c759; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; color: #1c1c1e; }
-        
-        header { background: white; padding: 15px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #d1d1d6; }
+        header { background: white; padding: 15px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #d1d1d6; }
+        .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
         .back-btn { background: #f2f2f7; border: none; padding: 10px 16px; border-radius: 12px; font-weight: bold; color: var(--blue); }
-        h1 { font-size: 18px; margin: 0; flex-grow: 1; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        h1 { font-size: 18px; margin: 0; flex-grow: 1; font-weight: 800; }
         .logo-img { height: 40px; border-radius: 8px; }
-
+        .search-bar { display: flex; background: #e5e5ea; border-radius: 12px; padding: 8px 12px; align-items: center; gap: 8px; }
+        .search-bar input { background: none; border: none; flex-grow: 1; font-size: 16px; outline: none; padding: 5px; }
         .container { padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        /* Cartes Dossiers */
         .card { background: white; border-radius: 22px; padding: 12px; text-align: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .img-box { width: 100%; aspect-ratio: 1/1; background: #e5e5ea; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .cam-badge { position: absolute; bottom: -5px; right: -5px; background: white; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 1px solid #eee; }
-
         .name { font-weight: bold; margin-top: 10px; display: block; font-size: 15px; }
         .counter { font-size: 11px; color: white; background: var(--gray); padding: 2px 8px; border-radius: 10px; margin-top: 5px; display: inline-block; }
-
-        /* Fiche Cheval & Album */
         .full-card { grid-column: span 2; text-align: left; padding: 15px; }
         .note-box { background: #fffde7; padding: 15px; border-radius: 15px; margin: 15px 0; border-left: 5px solid var(--gold); }
-        
         .album-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
         .album-item { position: relative; border-radius: 8px; overflow: hidden; background: #ddd; aspect-ratio: 1/1; }
         .album-item img { width: 100%; height: 100%; object-fit: cover; }
         .album-date { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 8px; text-align: center; padding: 2px; }
-
         .btn-row { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn-act { flex: 1; min-width: 120px; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
-
         .fab { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; border: none; width: 70px; height: 70px; border-radius: 50%; font-size: 40px; box-shadow: 0 5px 15px rgba(0,122,255,0.4); z-index: 200; }
         #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:500; align-items:center; justify-content:center; }
         .modal-box { background:white; padding:25px; border-radius:24px; width:85%; max-height: 80vh; overflow-y: auto; }
@@ -52,13 +47,18 @@
 <body>
 
 <header>
-    <button class="back-btn" id="btnBack" onclick="goBack()" style="display:none">‹ Retour</button>
-    <h1 id="title">Mes Écuries</h1>
-    <img src="logo.png" class="logo-img" alt="Logo">
+    <div class="header-top">
+        <button class="back-btn" id="btnBack" onclick="goBack()" style="display:none">‹ Retour</button>
+        <h1 id="title">Mes Écuries</h1>
+        <img src="logo.png" class="logo-img" alt="Logo">
+    </div>
+    <div class="search-bar" id="searchContainer">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Rechercher..." oninput="render()">
+    </div>
 </header>
 
 <div class="container" id="grid"></div>
-
 <button class="fab" onclick="showAdd()">+</button>
 
 <div id="modal">
@@ -71,19 +71,20 @@
 </div>
 
 <script>
-    let data = JSON.parse(localStorage.getItem('marechal_v10')) || [];
+    let data = JSON.parse(localStorage.getItem('marechal_v12')) || [];
     let cur = { level: 'ecuries', ec: null, cl: null };
 
     function render() {
         const grid = document.getElementById('grid');
         const title = document.getElementById('title');
         const back = document.getElementById('btnBack');
+        const search = document.getElementById('searchInput').value.toLowerCase();
         grid.innerHTML = '';
         back.style.display = cur.level === 'ecuries' ? 'none' : 'block';
 
         if (cur.level === 'ecuries') {
             title.innerText = "Mes Écuries";
-            data.forEach((ec, i) => {
+            data.filter(ec => ec.nom.toLowerCase().includes(search)).forEach((ec, i) => {
                 grid.innerHTML += card(i, ec.nom, ec.img, '🏠', `${ec.clients.length} Clients`, `goEc(${i})`);
             });
         } else if (cur.level === 'clients') {
@@ -92,26 +93,23 @@
                 grid.innerHTML += card(i, cl.nom, cl.img, '👤', `${cl.chevaux.length} Chevaux`, `goCl(${i})`);
             });
         } else {
-            const ch = data[cur.ec].clients[cur.cl].chevaux;
+            const horse = data[cur.ec].clients[cur.cl].chevaux;
             title.innerText = data[cur.ec].clients[cur.cl].nom;
-            ch.forEach((h, i) => {
+            horse.forEach((h, i) => {
                 grid.innerHTML += `
                 <div class="card full-card">
                     <div class="img-box" style="aspect-ratio:16/9">
                         ${h.img ? `<img src="${h.img}">` : '🐎'}
-                        <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setMainImg(event, ${i})"></label>
+                        <label style="position:absolute; bottom:5px; right:5px; background:white; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 5px rgba(0,0,0,0.2);">📸<input type="file" accept="image/*" capture="environment" style="display:none" onchange="setMainImg(event, ${i})"></label>
                     </div>
                     <span class="name" style="font-size:20px">${h.nom}</span>
                     <div class="note-box"><b>Note (${h.date || '--'}) :</b><br>${h.note || 'Pas de note.'}</div>
-                    
-                    <div style="font-weight:bold; margin-top:15px;">Album de suivi :</div>
-                    <div class="album-grid" id="album-${i}">
+                    <div class="album-grid">
                         ${(h.album || []).map(pic => `<div class="album-item"><img src="${pic.src}"><div class="album-date">${pic.date}</div></div>`).join('')}
                     </div>
-
                     <div class="btn-row">
                         <button class="btn-act" style="background:var(--blue)" onclick="startVocal(${i})">🎤 Vocal</button>
-                        <label class="btn-act" style="background:var(--green)">📸 Suivi<input type="file" accept="image/*" style="display:none" onchange="addAlbumPic(event, ${i})"></label>
+                        <label class="btn-act" style="background:var(--green)">📸 Photo Suivi<input type="file" accept="image/*" capture="environment" style="display:none" onchange="addAlbumPic(event, ${i})"></label>
                         <button class="btn-act" style="background:var(--red); flex:0.3" onclick="remove(${i})">🗑️</button>
                     </div>
                 </div>`;
@@ -122,7 +120,6 @@
     function card(idx, nom, img, emoji, count, act) {
         return `<div class="card">
             <div class="img-box" onclick="${act}">${img ? `<img src="${img}">` : emoji}</div>
-            <label class="cam-badge">📸<input type="file" accept="image/*" style="display:none" onchange="setMainImg(event, ${idx})"></label>
             <span class="name" onclick="${act}">${nom}</span>
             <span class="counter">${count}</span>
         </div>`;
@@ -136,7 +133,7 @@
         const f = document.getElementById('fields');
         f.innerHTML = '<input type="text" id="mNom" placeholder="Nom...">';
         if(cur.level === 'clients') f.innerHTML += '<input type="tel" id="mTel" placeholder="Tél..."><textarea id="mAdr" placeholder="Adresse..."></textarea>';
-        document.getElementById('mTitle').innerText = cur.level==='ecuries'?"Écurie":cur.level==='clients'?"Client":"Cheval";
+        document.getElementById('mTitle').innerText = "Ajouter";
         document.getElementById('modal').style.display = 'flex';
     }
 
@@ -173,6 +170,7 @@
 
     function startVocal(i) {
         const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Rec) return alert("Micro non supporté");
         const r = new Rec(); r.lang='fr-FR'; r.start();
         r.onresult = (e) => { 
             data[cur.ec].clients[cur.cl].chevaux[i].note = e.results[0][0].transcript; 
@@ -188,11 +186,12 @@
         else data[cur.ec].clients[cur.cl].chevaux.splice(i,1);
         save(); 
     } }
-    function save() { localStorage.setItem('marechal_v10', JSON.stringify(data)); render(); }
+    function save() { localStorage.setItem('marechal_v12', JSON.stringify(data)); render(); }
     render();
 </script>
 </body>
 </html>
+
 
 
 
